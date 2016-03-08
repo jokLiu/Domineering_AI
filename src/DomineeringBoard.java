@@ -24,29 +24,51 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 		this.vMoves = vMoves;
 	}
 
-	//the convention is that h player start the move
+	// the convention is that h player start the move
 	@Override
 	Player nextPlayer() {
 		return ((hMoves.size() + vMoves.size()) % 4 == 0 ? H : V);
 	}
 
+	// available moves (dots)
 	@Override
 	Set<DomineeringMove> availableMoves() {
-		return null;
+		return (value() == 0 ? complement(union(hMoves, vMoves)) : DomineeringMove.noMoves());
 	}
 
 	@Override
 	int value() {
-		return 0;
+		return (DomineeringMove.winsH(union(vMoves, hMoves)) ? 1
+				: DomineeringMove.winsV(union(vMoves, hMoves)) ? -1 : 0);
 	}
 
 	@Override
 	Board<DomineeringMove> play(DomineeringMove move) {
-		return null;
+		assert (!hMoves.contains(move) && !vMoves.contains(move));
+
+		if (nextPlayer() == H)
+			return new DomineeringBoard(add(hMoves, move), vMoves);
+		else
+			return new DomineeringBoard(hMoves, add(vMoves, move));
+
 	}
 
 	// The following short private methods are for readability. They
 	// ensure immutability.
+
+	// A simple conversion to string for testing:
+	public String toString() {
+		return (pm(DomineeringMove.A0) + " | " + pm(DomineeringMove.A1) + " | " + pm(DomineeringMove.A2)
+				+ pm(DomineeringMove.A3) + "\n" + "---+----+---+---\n" + pm(DomineeringMove.B0) + " | "
+				+ pm(DomineeringMove.B1) + " | " + pm(DomineeringMove.B2) + pm(DomineeringMove.B3) + "\n"
+				+ "---+----+---+---\n" + pm(DomineeringMove.C0) + " | " + pm(DomineeringMove.C1) + " | "
+				+ pm(DomineeringMove.C2) + pm(DomineeringMove.C3) + "\n" + "---+----+---+---\n" + pm(DomineeringMove.D0)
+				+ " | " + pm(DomineeringMove.D1) + " | " + pm(DomineeringMove.D2) + pm(DomineeringMove.D3) + "\n");
+	}
+
+	private String pm(DomineeringMove m) {
+		return (hMoves.contains(m) ? "X " : vMoves.contains(m) ? "O " : m.toString());
+	}
 
 	// We promise we won't change the set a (so we clone it):
 	static private EnumSet<DomineeringMove> intersection(EnumSet<DomineeringMove> a, EnumSet<DomineeringMove> b) {
