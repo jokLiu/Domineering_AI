@@ -19,6 +19,11 @@ public class DomineeringMove {
 	{
 		return second;
 	}
+	
+	public String toString()
+	{
+		return (first + " " + second);
+	}
 
 
 }

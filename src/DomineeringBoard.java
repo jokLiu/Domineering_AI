@@ -12,7 +12,7 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 	// We use the following class fields to represent the board:
 	private final List<DomineeringMove> hMoves;
 	private final List<DomineeringMove> vMoves;
-	private List<DomineeringMove> movesMade;
+	private final List<DomineeringMove> movesMade;
 	private final int sizeX;
 	private final int sizeY;
 
@@ -45,9 +45,9 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 		this.sizeY = sizeY;
 	}
 
-	private List<DomineeringMove> hor(int horizontal, int vertical) {
+	private static List<DomineeringMove> hor(int horizontal, int vertical) {
 
-		List<DomineeringMove> moves = new ArrayList<>(horizontal * vertical);
+		List<DomineeringMove> moves = new ArrayList<>();
 		int count = 0;
 		for (int v = 0; v < vertical; v++) {
 			for (int h = 0; h < horizontal - 1; h++) {
@@ -58,7 +58,7 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 		return moves;
 	}
 
-	private List<DomineeringMove> ver(int horizontal, int vertical) {
+	private static List<DomineeringMove> ver(int horizontal, int vertical) {
 
 		List<DomineeringMove> moves = new ArrayList<DomineeringMove>();
 		int count = 0;
@@ -76,34 +76,48 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 	@Override
 	Player nextPlayer() {
 
-		return ((hMoves.size() + vMoves.size()) % 2 == 0 ? H : V);
+		return (movesMade.size() % 2 == 0 ? H : V);
 
 	}
 
-	// available moves (dots)
+	// available moves
 	@Override
 	Set<DomineeringMove> availableMoves() {
+
 		if (nextPlayer() == H) {
+
 			return new HashSet<>(hMoves);
 		}
+
 		return new HashSet<>(vMoves);
 	}
 
 	@Override
 	int value() {
-		return (hMoves.isEmpty() ? -1 : vMoves.isEmpty() ? 1 : 0);
+		if (nextPlayer() == V && vMoves.isEmpty())
+			return 1;
+		else if (nextPlayer() == H && hMoves.isEmpty())
+			return -1;
+		return 0;
 	}
 
 	@Override
 	Board<DomineeringMove> play(DomineeringMove move) {
-		assert (!hMoves.contains(move) && !vMoves.contains(move));
-		List<DomineeringMove> mov = movesMade;
+		System.out.println("available horizontal moves " + hMoves.toString());
+		System.out.println("available vertical moves " + vMoves.toString());
+		System.out.println("moves made: " + movesMade);
+		System.out.println("current move: " + move);
+		System.out.println();
+		assert (hMoves.contains(move) || vMoves.contains(move));
+		final List<DomineeringMove> mov = movesMade;
 		mov.add(move);
-		return new DomineeringBoard(delete(hMoves, move), delete(vMoves, move), mov, sizeX, sizeY);
+		System.out.println(mov);
+		System.out.println(movesMade + "\n");
+		return new DomineeringBoard(delete(hMoves, move), delete(vMoves, move),mov , sizeX, sizeY);
 
 	}
 
-	private List<DomineeringMove> delete(List<DomineeringMove> moves, DomineeringMove m) {
+	private static List<DomineeringMove> delete(List<DomineeringMove> moves, DomineeringMove m) {
 		List<DomineeringMove> newMoves = moves;
 		int x = m.getFirst();
 		int y = m.getSecond();
@@ -121,133 +135,34 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 		for (int i = size - 1; i >= 0; i--) {
 			newMoves.remove(toDelete[i]);
 		}
+
 		return newMoves;
 	}
 
-	// The following short private methods are for readability. They
-	// ensure immutability.
-
 	// A simple conversion to string for testing:
-	// public String toString() {
-	// return (pm(DomineeringMove.A0) + " | " + pm(DomineeringMove.A1) + " | " +
-	// pm(DomineeringMove.A2)
-	// + pm(DomineeringMove.A3) + "\n" + "---+----+---+---\n" +
-	// pm(DomineeringMove.B0) + " | "
-	// + pm(DomineeringMove.B1) + " | " + pm(DomineeringMove.B2) +
-	// pm(DomineeringMove.B3) + "\n"
-	// + "---+----+---+---\n" + pm(DomineeringMove.C0) + " | " +
-	// pm(DomineeringMove.C1) + " | "
-	// + pm(DomineeringMove.C2) + pm(DomineeringMove.C3) + "\n" +
-	// "---+----+---+---\n" + pm(DomineeringMove.D0)
-	// + " | " + pm(DomineeringMove.D1) + " | " + pm(DomineeringMove.D2) +
-	// pm(DomineeringMove.D3) + "\n");
-	// }
+	public String toString() {
+		String[] map = new String[sizeX * sizeY];
 
-	// private String pm(DomineeringMove m) {
-	// return (hMoves.contains(m) ? "X " : vMoves.contains(m) ? "O " :
-	// m.toString());
-	// }
+		for (int h = 0; h < sizeX * sizeY; h++) {
+			map[h] = "" + h;
+		}
 
-	// private List<String> getCoord(List<DomineeringMove> moves) {
-	// List<String> col = new ArrayList<String>();
-	// for (int i = 0; i < moves.size(); i++) {
-	// col.add(moves.get(i).getCoord1());
-	// col.add(moves.get(i).getCoord2());
-	// }
-	// return col;
-	// }
+		// System.out.println(movesMade.size());
+		// for(DomineeringMove move: movesMade)
+		// {
+		// map[move.getFirst()] = "x";
+		// map[move.getSecond()] = "x";
+		// }
+		String s = "";
 
-	// static private List<DomineeringMove> intersection(List<DomineeringMove>
-	// a, List<DomineeringMove> b) {
-	// List<DomineeringMove> c = a; // a.clone();
-	// c.retainAll(b);
-	// return c;
-	// }
-	//
-	// static private boolean disjoint(List<DomineeringMove> a,
-	// List<DomineeringMove> b) {
-	// return (intersection(a, b).isEmpty());
-	// }
-	//
-	// static private List<DomineeringMove> union(List<DomineeringMove> a,
-	// List<DomineeringMove> b) {
-	// List<DomineeringMove> c = a;
-	// c.addAll(b);
-	// return c;
-	// }
-	//
-	// static private List<DomineeringMove> add(List<DomineeringMove> a,
-	// DomineeringMove b) {
-	// List<DomineeringMove> c = a;
-	// c.add(b);
-	// return c;
-	// }
+		for (int i = 0; i < sizeX * sizeY; i++) {
+			if (i % sizeX == 0) {
+				s += "\n";
+			}
+			s += " " + map[i] + " ";
+		}
+		return s;
 
-	// private List<DomineeringMove> addHor(List<DomineeringMove> a,
-	// DomineeringMove b)
-	// {
-	// String coord1 = b.getCoord1();
-	// String coord2 = b.getCoord2();
-	// List<DomineeringMove> previousMoves = a;
-	// List<DomineeringMove> moves = hor(sizeX, sizeY);
-	// for(DomineeringMove move: moves)
-	// {
-	// if(move.getCoord1().equals(coord1) ||
-	// move.getCoord1().equals(coord2) ||
-	// move.getCoord2().equals(coord1) ||
-	// move.getCoord2().equals(coord2))
-	// {
-	// previousMoves.add(move);
-	// }
-	// }
-	// return previousMoves;
-	//
-	// }
-	//
-	// private List<DomineeringMove> addVer(List<DomineeringMove> a,
-	// DomineeringMove b)
-	// {
-	// String coord1 = b.getCoord1();
-	// String coord2 = b.getCoord2();
-	// List<DomineeringMove> previousMoves = a;
-	// List<DomineeringMove> moves = ver(sizeX, sizeY);
-	// for(DomineeringMove move: moves)
-	// {
-	// if(move.getCoord1().equals(coord1) ||
-	// move.getCoord1().equals(coord2) ||
-	// move.getCoord2().equals(coord1) ||
-	// move.getCoord2().equals(coord2))
-	// {
-	// previousMoves.add(move);
-	// }
-	// }
-	// return previousMoves;
-	//
-	// }
-
-	// private Set<DomineeringMove> complement(List<DomineeringMove> a,
-	// List<DomineeringMove> b) {
-	// List<DomineeringMove> c = ver(sizeX, sizeY);
-	// List<DomineeringMove> e = hor(sizeX, sizeY);
-	// for (DomineeringMove move : a) {
-	// c.remove(a);
-	// }
-	// for (DomineeringMove move : b) {
-	// e.remove(a);
-	// }
-	// List<DomineeringMove> finalList = union(c, e);
-	// Set<DomineeringMove> moves = new HashSet<DomineeringMove>(finalList);
-	// return moves;
-	// }
-	//
-	// private boolean winsH() {
-	// return (vMoves.containsAll(ver(sizeX, sizeY)));
-	//
-	// }
-	//
-	// private boolean winsV() {
-	// return (hMoves.containsAll(hor(sizeX, sizeY)));
-	//
-	// }
+	}
 
 }

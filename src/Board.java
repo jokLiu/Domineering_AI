@@ -17,11 +17,13 @@ public abstract class Board<Move> {
   // Constructs the game tree of the board using the minimax algorithm
   // (without alpha-beta pruning):
   public GameTree<Move> tree() {
-    if (availableMoves().isEmpty())
+    if (availableMoves().isEmpty()){
+    	System.out.println("Yeah" + " " + value());
       return new GameTree<Move>
                     (this, 
                      new LinkedHashMap<Move,GameTree<Move>>(), 
                      value());
+    }
     else
       return (nextPlayer() == Player.MAXIMIZER ? maxTree() : minTree()); 
   }

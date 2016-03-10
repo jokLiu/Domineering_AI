@@ -4,11 +4,12 @@ public class CommandLineDomineering {
 	   
 		public DomineeringMove getMove() {
 	      String s = System.console().readLine("Enter your move: ");
+//	      System.out.println(s);
 	      int one =0, two;
 	      String str="";
 	      for(int i=0; i<s.length(); i++)
 	      {
-	    	  if(str.charAt(i) != ' ')
+	    	  if(s.charAt(i) != ' ')
 	    	  {
 	    		  str+=s.charAt(i);
 	    	  }
@@ -19,6 +20,7 @@ public class CommandLineDomineering {
 	      }
 	      
 	      two = Integer.parseInt(str);
+	      System.out.println(one + " " + two);
 	      return(new DomineeringMove(one, two));
 	    }
 
@@ -37,8 +39,8 @@ public class CommandLineDomineering {
 
 	  public static void main(String [] args) {
 		  Board<DomineeringMove> board = new DomineeringBoard();
-	      board.tree().firstPlayer(new CommandLineDom());
-//	    board.tree().secondPlayer(new CommandLineDom());
+//	      board.tree().firstPlayer(new CommandLineDom());
+	    board.tree().secondPlayer(new CommandLineDom());
 	  }
 
 }
