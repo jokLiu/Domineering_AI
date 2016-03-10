@@ -1,8 +1,25 @@
 
 public class CommandLineDomineering {
 	private static class CommandLineDom implements MoveChannel<DomineeringMove> {
-	    public DomineeringMove getMove() {
-	      return(DomineeringMove.valueOf(System.console().readLine("Enter your move: ")));
+	   
+		public DomineeringMove getMove() {
+	      String s = System.console().readLine("Enter your move: ");
+	      int one =0, two;
+	      String str="";
+	      for(int i=0; i<s.length(); i++)
+	      {
+	    	  if(str.charAt(i) != ' ')
+	    	  {
+	    		  str+=s.charAt(i);
+	    	  }
+	    	  else {
+	    		  one = Integer.parseInt(str);
+	    		  str="";
+	    	  }
+	      }
+	      
+	      two = Integer.parseInt(str);
+	      return(new DomineeringMove(one, two));
 	    }
 
 	    public void giveMove(DomineeringMove move) {
@@ -19,9 +36,9 @@ public class CommandLineDomineering {
 	  }
 
 	  public static void main(String [] args) {
-		  DomineeringBoard board = new DomineeringBoard();
-	     // board.tree().firstPlayer(new CommandLineTTT());
-	    board.tree().secondPlayer(new CommandLineDom());
+		  Board<DomineeringMove> board = new DomineeringBoard();
+	      board.tree().firstPlayer(new CommandLineDom());
+//	    board.tree().secondPlayer(new CommandLineDom());
 	  }
 
 }
