@@ -103,22 +103,25 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 
 	@Override
 	Board<DomineeringMove> play(DomineeringMove move) {
-		System.out.println("available horizontal moves " + hMoves.toString());
-		System.out.println("available vertical moves " + vMoves.toString());
-		System.out.println("moves made: " + movesMade);
-		System.out.println("current move: " + move);
-		System.out.println();
+//		System.out.println("available horizontal moves " + hMoves.toString());
+//		System.out.println("available vertical moves " + vMoves.toString());
+//		System.out.println("moves made: " + movesMade);
+//		System.out.println("current move: " + move);
+//		System.out.println();
 		assert (hMoves.contains(move) || vMoves.contains(move));
-		final List<DomineeringMove> mov = movesMade;
+		
+		final List<DomineeringMove> mov = new ArrayList<>(movesMade);
 		mov.add(move);
-		System.out.println(mov);
-		System.out.println(movesMade + "\n");
+//		System.out.println(mov);
+//		System.out.println(movesMade + "\n");
 		return new DomineeringBoard(delete(hMoves, move), delete(vMoves, move),mov , sizeX, sizeY);
 
 	}
+	
+	
 
 	private static List<DomineeringMove> delete(List<DomineeringMove> moves, DomineeringMove m) {
-		List<DomineeringMove> newMoves = moves;
+		List<DomineeringMove> newMoves = new ArrayList<>(moves);
 		int x = m.getFirst();
 		int y = m.getSecond();
 		int[] toDelete = new int[100];

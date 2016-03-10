@@ -18,7 +18,7 @@ public abstract class Board<Move> {
   // (without alpha-beta pruning):
   public GameTree<Move> tree() {
     if (availableMoves().isEmpty()){
-    	System.out.println("Yeah" + " " + value());
+//    	System.out.println("Yeah" + " " + value());
       return new GameTree<Move>
                     (this, 
                      new LinkedHashMap<Move,GameTree<Move>>(), 
