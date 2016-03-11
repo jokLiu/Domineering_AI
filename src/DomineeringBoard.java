@@ -84,7 +84,6 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 	@Override
 	Set<DomineeringMove> availableMoves() {
 
-	
 		if (nextPlayer() == H) {
 
 			return new HashSet<>(hMoves);
@@ -104,22 +103,13 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 
 	@Override
 	Board<DomineeringMove> play(DomineeringMove move) {
-//		System.out.println("available horizontal moves " + hMoves.toString());
-//		System.out.println("available vertical moves " + vMoves.toString());
-//		System.out.println("moves made: " + movesMade);
-//		System.out.println("current move: " + move);
-//		System.out.println();
 		assert (hMoves.contains(move) || vMoves.contains(move));
-		
+
 		final List<DomineeringMove> mov = new ArrayList<>(movesMade);
 		mov.add(move);
-//		System.out.println(mov);
-//		System.out.println(movesMade + "\n");
-		return new DomineeringBoard(delete(hMoves, move), delete(vMoves, move),mov , sizeX, sizeY);
+		return new DomineeringBoard(delete(hMoves, move), delete(vMoves, move), mov, sizeX, sizeY);
 
 	}
-	
-	
 
 	private static List<DomineeringMove> delete(List<DomineeringMove> moves, DomineeringMove m) {
 		List<DomineeringMove> newMoves = new ArrayList<>(moves);
@@ -151,19 +141,28 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 			map[h] = "" + h;
 		}
 
-		// System.out.println(movesMade.size());
-		// for(DomineeringMove move: movesMade)
-		// {
-		// map[move.getFirst()] = "x";
-		// map[move.getSecond()] = "x";
-		// }
+		int count = 0;
+		System.out.println(movesMade.size());
+		for (DomineeringMove move : movesMade) {
+			if (count % 2 == 0) {
+				map[move.getFirst()] = "-";
+				map[move.getSecond()] = "-";
+			} else {
+				map[move.getFirst()] = "|";
+				map[move.getSecond()] = "|";
+			}
+			count++;
+		}
 		String s = "";
 
 		for (int i = 0; i < sizeX * sizeY; i++) {
 			if (i % sizeX == 0) {
 				s += "\n";
 			}
-			s += " " + map[i] + " ";
+			if(map[i].length() ==1)
+				s += "  " + map[i] +"  ";
+			else s += " " + map[i] +"  ";
+			
 		}
 		return s;
 

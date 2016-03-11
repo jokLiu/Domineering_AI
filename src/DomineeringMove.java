@@ -24,10 +24,8 @@ public class DomineeringMove extends Object {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
 		
-		
-		return prime;
+		return first+second;
 	}
 
 	@Override
@@ -37,7 +35,7 @@ public class DomineeringMove extends Object {
 		}
 		DomineeringMove m = (DomineeringMove) move;
 
-		return (first == m.getFirst() && second == m.getSecond());
+		return ((first == m.getFirst() && second == m.getSecond())||(first == m.getSecond() && second == m.getFirst()));
 
 	}
 
