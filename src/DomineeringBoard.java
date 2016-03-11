@@ -84,6 +84,7 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 	@Override
 	Set<DomineeringMove> availableMoves() {
 
+	
 		if (nextPlayer() == H) {
 
 			return new HashSet<>(hMoves);

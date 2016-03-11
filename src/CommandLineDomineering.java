@@ -39,8 +39,8 @@ public class CommandLineDomineering {
 
 	  public static void main(String [] args) {
 		  Board<DomineeringMove> board = new DomineeringBoard();
-	      board.tree().firstPlayer(new CommandLineDom());
-//	    board.tree().secondPlayer(new CommandLineDom());
+//	      board.tree().firstPlayer(new CommandLineDom());
+	    board.tree().secondPlayer(new CommandLineDom());
 	  }
 
 }
