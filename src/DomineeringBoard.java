@@ -48,12 +48,12 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 	private static List<DomineeringMove> hor(int horizontal, int vertical) {
 
 		List<DomineeringMove> moves = new ArrayList<>();
-		int count = 0;
+		
 		for (int v = 0; v < vertical; v++) {
 			for (int h = 0; h < horizontal - 1; h++) {
-				moves.add(new DomineeringMove(count, ++count));
+				moves.add(new DomineeringMove(h, v));
 			}
-			count++;
+		
 		}
 		return moves;
 	}
@@ -61,10 +61,10 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 	private static List<DomineeringMove> ver(int horizontal, int vertical) {
 
 		List<DomineeringMove> moves = new ArrayList<DomineeringMove>();
-		int count = 0;
-		for (int v = 0; v < horizontal; v++) {
-			for (int h = 0; h < vertical - 1; h++) {
-				moves.add(new DomineeringMove(count++, count + horizontal - 1));
+		
+		for (int v = 0; v < vertical-1; v++) {
+			for (int h = 0; h < horizontal; h++) {
+				moves.add(new DomineeringMove(h, v));
 			}
 
 		}
@@ -107,19 +107,82 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 
 		final List<DomineeringMove> mov = new ArrayList<>(movesMade);
 		mov.add(move);
-		return new DomineeringBoard(delete(hMoves, move), delete(vMoves, move), mov, sizeX, sizeY);
-
+		if(nextPlayer() == Player.MAXIMIZER){
+			return new DomineeringBoard(deleteHorizontal(hMoves, move, Player.MAXIMIZER), deleteVertical(vMoves, move, Player.MAXIMIZER), mov, sizeX, sizeY);
+		}
+		else
+		{
+			return new DomineeringBoard(deleteHorizontal(hMoves, move, Player.MINIMIZER), deleteVertical(vMoves, move, Player.MINIMIZER), mov, sizeX, sizeY);
+		}
 	}
 
-	private static List<DomineeringMove> delete(List<DomineeringMove> moves, DomineeringMove m) {
+	private static List<DomineeringMove> deleteHorizontal(List<DomineeringMove> moves, DomineeringMove m, Player p) {
 		List<DomineeringMove> newMoves = new ArrayList<>(moves);
-		int x = m.getFirst();
-		int y = m.getSecond();
+		
+		//getting the coordinates of the move
+		int x1 = m.getFirst();
+		int y1 = m.getSecond();
+		int x2;
+		int y2;
+		if(p == Player.MAXIMIZER){
+			y2=y1;
+			x2 = x1+1;
+		}
+		else
+		{
+			y2=y1+1;
+			x2 = x1;
+		}
+		//------------
+		
 		int[] toDelete = new int[100];
 		int size = 0;
 		int count = 0;
 		for (DomineeringMove move : newMoves) {
-			if (move.getFirst() == x || move.getFirst() == y || move.getSecond() == x || move.getSecond() == y) {
+			if ((move.getFirst() == x1 && move.getSecond() == y1)  || 
+					(move.getFirst() == x2 && move.getSecond() == y2) ||
+					(move.getFirst() == x2-1 && move.getSecond() == y2) ||
+					(move.getFirst() == x1-1 && move.getSecond() == y1)) {
+				toDelete[size] = count;
+				size++;
+			}
+			count++;
+		}
+
+		for (int i = size - 1; i >= 0; i--) {
+			newMoves.remove(toDelete[i]);
+		}
+
+		return newMoves;
+	}
+	
+	private static List<DomineeringMove> deleteVertical(List<DomineeringMove> moves, DomineeringMove m, Player p) {
+		List<DomineeringMove> newMoves = new ArrayList<>(moves);
+		
+		//getting the coordinates of the move
+		int x1 = m.getFirst();
+		int y1 = m.getSecond();
+		int x2;
+		int y2;
+		if(p == Player.MAXIMIZER){
+			y2=y1;
+			x2 = x1+1;
+		}
+		else
+		{
+			y2=y1+1;
+			x2 = x1;
+		}
+		//------------
+		
+		int[] toDelete = new int[100];
+		int size = 0;
+		int count = 0;
+		for (DomineeringMove move : newMoves) {
+			if ((move.getFirst() == x1 && move.getSecond() == y1)  || 
+					(move.getFirst() == x2 && move.getSecond() == y2) ||
+					(move.getFirst() == x2 && move.getSecond() == y2-1) ||
+					(move.getFirst() == x1 && move.getSecond() == y1-1)) {
 				toDelete[size] = count;
 				size++;
 			}
@@ -137,8 +200,11 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 	public String toString() {
 		String[] map = new String[sizeX * sizeY];
 
-		for (int h = 0; h < sizeX * sizeY; h++) {
-			map[h] = "" + h;
+		for (int h = 0; h < sizeX ; h++) {
+			for(int v=0; v<sizeY;v++){
+				map[h] = h+","+v;
+			}
+			
 		}
 
 		int count = 0;
@@ -155,15 +221,15 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 		}
 		String s = "";
 
-		for (int i = 0; i < sizeX * sizeY; i++) {
-			if (i % sizeX == 0) {
-				s += "\n";
-			}
-			if(map[i].length() ==1)
-				s += "  " + map[i] +"  ";
-			else s += " " + map[i] +"  ";
-			
-		}
+//		for (int i = 0; i < sizeX * sizeY; i++) {
+//			if (i % sizeX == 0) {
+//				s += "\n";
+//			}
+//			if(map[i].length() ==1)
+//				s += "  " + map[i] +"  ";
+//			else s += " " + map[i] +"  ";
+//			
+//		}
 		return s;
 
 	}
