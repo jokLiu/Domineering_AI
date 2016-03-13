@@ -201,11 +201,12 @@ public class DomBoard extends Board2<DomineeringMove> {
 		String s = "";
 
 		
-
+		s = availableMoves().toString();
+		s += "\n\n";
 		if(nextPlayer()== Player.MAXIMIZER)
 		{
-			for (int v = 0; v < sizeX ; v++) {
-				for(int h=0; h<sizeY;h++){
+			for (int v = 0; v < sizeY ; v++) {
+				for(int h=0; h<sizeX;h++){
 					if(hMoves.contains(new DomineeringMove(h,v))) s += h+","+v+ " ";
 					else if(movesMade.contains(new DomineeringMove(h,v))) s += "  H ";
 					else s += "  * ";
@@ -216,8 +217,8 @@ public class DomBoard extends Board2<DomineeringMove> {
 		}
 		else
 		{
-			for (int v = 0; v < sizeX ; v++) {
-				for(int h=0; h<sizeY;h++){
+			for (int v = 0; v < sizeY ; v++) {
+				for(int h=0; h<sizeX;h++){
 					if(vMoves.contains(new DomineeringMove(h,v))) s += h+","+v+ " ";
 					else if(movesMade.contains(new DomineeringMove(h,v))) s += "  V ";
 					else s += "  * ";
