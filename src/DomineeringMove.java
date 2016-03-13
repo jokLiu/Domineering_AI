@@ -19,7 +19,7 @@ public class DomineeringMove extends Object {
 	}
 
 	public String toString() {
-		return (first + " " + second);
+		return (first + "," + second);
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class DomineeringMove extends Object {
 		}
 		DomineeringMove m = (DomineeringMove) move;
 
-		return ((first == m.getFirst() && second == m.getSecond())||(first == m.getSecond() && second == m.getFirst()));
+		return ((first == m.getFirst() && second == m.getSecond()));
 
 	}
 

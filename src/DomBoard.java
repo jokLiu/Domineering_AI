@@ -3,21 +3,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class DomineeringBoard extends Board<DomineeringMove> {
+public class DomBoard extends Board2<DomineeringMove> {
 
 	// Players for the domineering
 	private final Player H = Player.MAXIMIZER;
 	private final Player V = Player.MINIMIZER;
 
-	// We use the following class fields to represent the board:
+	// We use the following class fields to represent the Board2:
 	private final List<DomineeringMove> hMoves;
 	private final List<DomineeringMove> vMoves;
 	private final List<DomineeringMove> movesMade;
 	private final int sizeX;
 	private final int sizeY;
 
-	// A public method to construct the initial board:
-	public DomineeringBoard() {
+	// A public method to construct the initial Board2:
+	public DomBoard() {
 		hMoves = hor(4, 4);
 		vMoves = ver(4, 4);
 		movesMade = new ArrayList<>();
@@ -26,7 +26,7 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 
 	}
 
-	public DomineeringBoard(int x, int y) {
+	public DomBoard(int x, int y) {
 		hMoves = hor(x, y);
 		vMoves = ver(x, y);
 		movesMade = new ArrayList<>();
@@ -35,7 +35,7 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 	}
 
 	// All other constructors should be private (why?):
-	private DomineeringBoard(List<DomineeringMove> hMoves, List<DomineeringMove> vMoves,
+	private DomBoard(List<DomineeringMove> hMoves, List<DomineeringMove> vMoves,
 			List<DomineeringMove> movesMade, int sizeX, int sizeY) {
 		// assert (disjoint(hMoves, vMoves));
 		this.hMoves = hMoves;
@@ -102,17 +102,17 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 	}
 
 	@Override
-	Board<DomineeringMove> play(DomineeringMove move) {
+	Board2<DomineeringMove> play(DomineeringMove move) {
 		assert (hMoves.contains(move) || vMoves.contains(move));
 
 		final List<DomineeringMove> mov = new ArrayList<>(movesMade);
 		mov.add(move);
 		if(nextPlayer() == Player.MAXIMIZER){
-			return new DomineeringBoard(deleteHorizontal(hMoves, move, Player.MAXIMIZER), deleteVertical(vMoves, move, Player.MAXIMIZER), mov, sizeX, sizeY);
+			return new DomBoard(deleteHorizontal(hMoves, move, Player.MAXIMIZER), deleteVertical(vMoves, move, Player.MAXIMIZER), mov, sizeX, sizeY);
 		}
 		else
 		{
-			return new DomineeringBoard(deleteHorizontal(hMoves, move, Player.MINIMIZER), deleteVertical(vMoves, move, Player.MINIMIZER), mov, sizeX, sizeY);
+			return new DomBoard(deleteHorizontal(hMoves, move, Player.MINIMIZER), deleteVertical(vMoves, move, Player.MINIMIZER), mov, sizeX, sizeY);
 		}
 	}
 
@@ -207,7 +207,8 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 			for (int v = 0; v < sizeX ; v++) {
 				for(int h=0; h<sizeY;h++){
 					if(hMoves.contains(new DomineeringMove(h,v))) s += h+","+v+ " ";
-					else  s += "xxx ";
+					else if(movesMade.contains(new DomineeringMove(h,v))) s += "  H ";
+					else s += "  * ";
 				}
 				s+= "\n";
 				
@@ -218,7 +219,8 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 			for (int v = 0; v < sizeX ; v++) {
 				for(int h=0; h<sizeY;h++){
 					if(vMoves.contains(new DomineeringMove(h,v))) s += h+","+v+ " ";
-					else  s += "xxx ";
+					else if(movesMade.contains(new DomineeringMove(h,v))) s += "  V ";
+					else s += "  * ";
 				}
 				s+= "\n";
 				
