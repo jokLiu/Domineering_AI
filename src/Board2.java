@@ -1,10 +1,21 @@
-import java.util.LinkedHashMap;
 import java.util.Set;
 
 public abstract class Board2<Move> {
 	abstract Player nextPlayer();
 
 	abstract Set<Move> availableMoves();
+	
+	abstract Set<Move> availableHorizontalMoves();
+	
+	abstract Set<Move> availableVerticalMoves();
+	
+	abstract int realHorizontalMoves();
+	
+	abstract int realVerticalMoves();
+	
+	abstract int safeHorizontalMoves();
+	
+	abstract int safeVerticalMoves();
 
 	abstract int value();
 
@@ -21,7 +32,7 @@ public abstract class Board2<Move> {
 		return new GameTree2<Move>(this, this.availableMoves(), value(), null);
 	}
 	
-	public GameTree2<Move> tree(int alfa, int beta, MoveChannel<Move> c, Computer comp) {
+	public GameTree2<Move> tree(int alfa, int beta, int level) {
 		
 		
 		if (availableMoves().isEmpty()) {
@@ -29,21 +40,34 @@ public abstract class Board2<Move> {
 		}
 		else
 		{
-			return (nextPlayer() == Player.MAXIMIZER ? maxTree(alfa, beta, c,comp) : minTree(alfa, beta, c, comp));
+			return (nextPlayer() == Player.MAXIMIZER ? maxTree(alfa, beta, level) : minTree(alfa, beta, level));
 		}
 		
 	}
 
 	// Two helper methods for that, which call the above method tree:
-	public GameTree2<Move> maxTree(int alfa, int beta, MoveChannel<Move> c, Computer comp) {
+	public GameTree2<Move> maxTree(int alfa, int beta, int level) {
 		assert (!availableMoves().isEmpty());
 
+		if(level ==0)
+		{
+//			System.out.println("reach");
+			if(availableHorizontalMoves().size() > availableVerticalMoves().size() ||
+					(availableHorizontalMoves().size() > 0 &&  availableVerticalMoves().size()==0))
+			{
+				return new GameTree2<Move>(this, availableMoves(), 1, null);
+			}
+			else
+			{
+				return new GameTree2<Move>(this, availableMoves(), -1, null);
+			}
+		}
 		int optimalOutcome = Integer.MIN_VALUE;
-		LinkedHashMap<Move, GameTree2<Move>> children = new LinkedHashMap<Move, GameTree2<Move>>();
+		
 		Move lastMove = null;
 		for (Move m : availableMoves()) {
 			lastMove = m;
-			GameTree2<Move> subtree = play(m).tree(alfa, beta, c, comp);
+			GameTree2<Move> subtree = play(m).tree(alfa, beta, level-1);
 			optimalOutcome = Math.max(optimalOutcome, subtree.optimalOutcome());
 			alfa = Math.max(alfa,  optimalOutcome);
 			if(alfa==1)
@@ -51,19 +75,33 @@ public abstract class Board2<Move> {
 				break;
 			}
 		}
-		c.giveMove(lastMove);
+		
 		return new GameTree2<Move>(this, availableMoves(), optimalOutcome, lastMove);
 	}
 
-	public GameTree2<Move> minTree(int alfa, int beta, MoveChannel<Move> c, Computer comp) {
+	public GameTree2<Move> minTree(int alfa, int beta, int level) {
 		assert (!availableMoves().isEmpty());
 
+		if(level ==0)
+		{
+//			System.out.println("reach");
+			if(availableHorizontalMoves().size() < availableVerticalMoves().size() ||
+					(availableHorizontalMoves().size() == 0 &&  availableVerticalMoves().size() < 0))
+			{
+				return new GameTree2<Move>(this, availableMoves(), -1, null);
+			}
+			else
+			{
+				return new GameTree2<Move>(this, availableMoves(), 1, null);
+			}
+		}
+
 		int optimalOutcome = Integer.MAX_VALUE;
-		LinkedHashMap<Move, GameTree2<Move>> children = new LinkedHashMap<Move, GameTree2<Move>>();
+		
 		Move lastMove = null;
 		for (Move m : availableMoves()) {
 			lastMove = m;
-			GameTree2<Move> subtree = play(m).tree(alfa, beta, c, comp);
+			GameTree2<Move> subtree = play(m).tree(alfa, beta, level-1);
 			optimalOutcome = Math.min(optimalOutcome, subtree.optimalOutcome());
 			beta = Math.min(beta, optimalOutcome);
 			if(beta==-1)
@@ -71,7 +109,7 @@ public abstract class Board2<Move> {
 				break;
 			}
 		}
-		c.giveMove(lastMove);
+		
 		return new GameTree2<Move>(this, availableMoves(), optimalOutcome, lastMove);
 	}
 }

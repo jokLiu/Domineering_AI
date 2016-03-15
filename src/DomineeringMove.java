@@ -38,5 +38,10 @@ public class DomineeringMove extends Object {
 		return ((first == m.getFirst() && second == m.getSecond()));
 
 	}
+	
+	public boolean isTouching(DomineeringMove move)
+	{
+		return false;
+	}
 
 }

@@ -22,7 +22,7 @@ public class BlackBoxDomineering2 {
 		}
 
 		public void giveMove(DomineeringMove move) {
-//			System.out.println("I play " + move);
+			System.out.println("I play " + move);
 		}
 
 		public void comment(String msg) {
@@ -41,9 +41,9 @@ public class BlackBoxDomineering2 {
 		int height = Integer.parseInt(args[2]);
 		Board2<DomineeringMove> board = new DomBoard(width, height);
 		if (whoStarts.equals("first")) {
-			board.tree().firstPlayer(new CommandLineBlackBox(), Computer.FIRST);
+			board.tree().firstPlayer(new CommandLineBlackBox());
 		} else {
-			board.tree().secondPlayer(new CommandLineBlackBox(),  Computer.SECOND);
+			board.tree().secondPlayer(new CommandLineBlackBox());
 		}
 
 	}
