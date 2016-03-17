@@ -88,9 +88,7 @@ public class GameTree<Move> {
     } 
     else {
       Move m = c.getMove();
-      System.out.println(m);
-      System.out.println(children.keySet());
-      System.out.println(children.containsKey(m));
+
       assert(children.containsKey(m));
       children.get(m).firstPlayer(c);
     }

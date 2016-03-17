@@ -1,10 +1,13 @@
+import java.util.Scanner;
+
 public class BlackBoxDomineering {
 
 	private static class CommandLineBlackBox implements MoveChannel<DomineeringMove> {
 
 		public DomineeringMove getMove() {
-			String s = System.console().readLine("Enter your move: ");
-			// System.out.println(s);
+			
+			Scanner sc = new Scanner(System.in);
+			String s = sc.nextLine();
 			int one = 0, two;
 			String str = "";
 			for (int i = 0; i < s.length(); i++) {
@@ -17,28 +20,28 @@ public class BlackBoxDomineering {
 			}
 
 			two = Integer.parseInt(str);
-			System.out.println(one + " " + two);
 			return (new DomineeringMove(one, two));
 		}
 
 		public void giveMove(DomineeringMove move) {
-			System.out.println("I play " + move);
+			System.out.println(move);
+			System.out.flush();;
 		}
 
 		public void comment(String msg) {
-			System.out.println(msg);
+
 		}
 
 		public void end(int value) {
-			System.out.println("Game over. The result is " + value);
+			System.exit(0);
 		}
 	}
 
 	public static void main(String[] args) {
-		assert (args.length == 3);
+		assert (args.length == 4);
 		String whoStarts = args[0];
-		int width = Integer.parseInt(args[1]);
-		int height = Integer.parseInt(args[2]);
+		int width = Integer.parseInt(args[2]);
+		int height = Integer.parseInt(args[3]);
 		Board<DomineeringMove> board = new DomineeringBoard(width, height);
 		if (whoStarts.equals("first")) {
 			board.tree().firstPlayer(new CommandLineBlackBox());

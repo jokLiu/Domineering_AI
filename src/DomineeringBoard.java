@@ -224,28 +224,7 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 				
 			}
 		}
-//		int count = 0;
-//		System.out.println(movesMade.size());
-//		for (DomineeringMove move : movesMade) {
-//			if (count % 2 == 0) {
-//				map[move.getFirst()] = "-";
-//				map[move.getSecond()] = "-";
-//			} else {
-//				map[move.getFirst()] = "|";
-//				map[move.getSecond()] = "|";
-//			}
-//			count++;
-//		}
-//		String s = "";
-//
-//		for (int i = 0; i < sizeX * sizeY; i++) {
-//			if (i % sizeX == 0) {
-//				s += "\n";
-//			}
-//			
-//				s += "  " + map[i] +"  ";
-//			
-//		}
+		
 		return s;
 
 	}

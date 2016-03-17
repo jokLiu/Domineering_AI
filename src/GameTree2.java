@@ -34,7 +34,7 @@ public class GameTree2<Move> {
 	}
 
 	// Plays first using this tree:
-	public void firstPlayer(MoveChannel<Move> c) {
+	public void firstPlayer(MoveChannel<Move> c, boolean isSmallBoard) {
 		c.comment(board + "\nThe optimal outcome is " + optimalOutcome);
 
 		if (isLeaf()) {
@@ -42,15 +42,24 @@ public class GameTree2<Move> {
 			c.end(board.value());
 		} else {
 
-			GameTree2<Move> tree = board.tree(Integer.MIN_VALUE, Integer.MAX_VALUE, 12);
-			c.giveMove(tree.lastMove);
-			GameTree2<Move> newTree = board.tree(tree.lastMove);
-			newTree.secondPlayer(c);
+			if (isSmallBoard) {
+				GameTree2<Move> tree = board.tree(Integer.MIN_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+				c.giveMove(tree.lastMove);
+				GameTree2<Move> newTree = board.tree(tree.lastMove);
+				newTree.secondPlayer(c, isSmallBoard);
+			}
+			else
+			{
+				GameTree2<Move> tree = board.tree(Integer.MIN_VALUE, Integer.MAX_VALUE, 6);
+				c.giveMove(tree.lastMove);
+				GameTree2<Move> newTree = board.tree(tree.lastMove);
+				newTree.secondPlayer(c, isSmallBoard);
+			}
 		}
 	}
 
 	// Plays second using this tree:
-	public void secondPlayer(MoveChannel<Move> c) {
+	public void secondPlayer(MoveChannel<Move> c, boolean isSmallBoard) {
 		c.comment(board + "\nThe optimal outcome is " + optimalOutcome);
 
 		if (isLeaf()) {
@@ -60,7 +69,7 @@ public class GameTree2<Move> {
 			Move m = c.getMove();
 			assert (availMoves().contains(m));
 			GameTree2<Move> tree = board.tree(m);
-			tree.firstPlayer(c);
+			tree.firstPlayer(c, isSmallBoard);
 		}
 	}
 }

@@ -105,14 +105,37 @@ public class DomBoard extends Board2<DomineeringMove> {
 
 	@Override
 	int realHorizontalMoves() {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		int same = 0;
+		int coord = -1;
+		for (DomineeringMove h : hMoves) {
+			
+			if (h.getFirst() == coord)
+			{
+				same++;
+			}
+			coord = h.getSecond();
+		}
+		
+		
+		return (hMoves.size()-(1+same)/2);
 	}
 
 	@Override
 	int realVerticalMoves() {
-		// TODO Auto-generated method stub
-		return 0;
+		int same = 0;
+		int coord = -1;
+		for (DomineeringMove h : vMoves) {
+			
+			if (h.getFirst() == coord)
+			{
+				same++;
+			}
+			coord = h.getSecond();
+		}
+		
+		
+		return (vMoves.size()-(1+same)/2);
 	}
 
 	@Override
@@ -130,7 +153,7 @@ public class DomBoard extends Board2<DomineeringMove> {
 				}
 			}
 		}
-		return number;
+		return hMoves.size() - number;
 	}
 
 	@Override
@@ -148,7 +171,7 @@ public class DomBoard extends Board2<DomineeringMove> {
 				}
 			}
 		}
-		return number;
+		return vMoves.size() - number;
 	}
 
 	@Override

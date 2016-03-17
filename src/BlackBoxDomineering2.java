@@ -1,10 +1,13 @@
+import java.util.Scanner;
+
 public class BlackBoxDomineering2 {
-	
+
 	private static class CommandLineBlackBox implements MoveChannel<DomineeringMove> {
 
 		public DomineeringMove getMove() {
-			String s = System.console().readLine("Enter your move: ");
-			// System.out.println(s);
+			Scanner sc = new Scanner(System.in);
+			String s = sc.nextLine();
+
 			int one = 0, two;
 			String str = "";
 			for (int i = 0; i < s.length(); i++) {
@@ -22,7 +25,8 @@ public class BlackBoxDomineering2 {
 		}
 
 		public void giveMove(DomineeringMove move) {
-			System.out.println("I play " + move);
+			System.err.println("I play " + move);
+			System.out.println(move);
 		}
 
 		public void comment(String msg) {
@@ -35,15 +39,25 @@ public class BlackBoxDomineering2 {
 	}
 
 	public static void main(String[] args) {
-		assert (args.length == 3);
+		assert (args.length == 4);
 		String whoStarts = args[0];
-		int width = Integer.parseInt(args[1]);
-		int height = Integer.parseInt(args[2]);
+		int width = Integer.parseInt(args[2]);
+		int height = Integer.parseInt(args[3]);
 		Board2<DomineeringMove> board = new DomBoard(width, height);
-		if (whoStarts.equals("first")) {
-			board.tree().firstPlayer(new CommandLineBlackBox());
+		if (height * width > 25) {
+			if (whoStarts.equals("first")) {
+				board.tree().firstPlayer(new CommandLineBlackBox(), false);
+			} else if(whoStarts.equals("second")) {
+				board.tree().secondPlayer(new CommandLineBlackBox(), false);
+			}
+			else System.exit(1);
 		} else {
-			board.tree().secondPlayer(new CommandLineBlackBox());
+			if (whoStarts.equals("first")) {
+				board.tree().firstPlayer(new CommandLineBlackBox(), true);
+			} else if(whoStarts.equals("second")) {
+				board.tree().secondPlayer(new CommandLineBlackBox(), true);
+			}
+			else System.exit(1);
 		}
 
 	}

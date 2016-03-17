@@ -39,9 +39,4 @@ public class DomineeringMove extends Object {
 
 	}
 	
-	public boolean isTouching(DomineeringMove move)
-	{
-		return false;
-	}
-
 }
