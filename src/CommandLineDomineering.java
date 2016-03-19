@@ -4,7 +4,7 @@ public class CommandLineDomineering {
 	   
 		public DomineeringMove getMove() {
 	      String s = System.console().readLine("Enter your move: ");
-//	      System.out.println(s);
+
 	      int one =0, two;
 	      String str="";
 	      for(int i=0; i<s.length(); i++)

@@ -71,7 +71,7 @@ public class DomBoard extends Board2<DomineeringMove> {
 
 		return moves;
 	}
-
+	
 	// the convention is that h player start the move
 	@Override
 	Player nextPlayer() {
@@ -105,20 +105,18 @@ public class DomBoard extends Board2<DomineeringMove> {
 
 	@Override
 	int realHorizontalMoves() {
-		
+
 		int same = 0;
 		int coord = -1;
 		for (DomineeringMove h : hMoves) {
-			
-			if (h.getFirst() == coord)
-			{
+
+			if (h.getFirst() == coord) {
 				same++;
 			}
 			coord = h.getSecond();
 		}
-		
-		
-		return (hMoves.size()-(1+same)/2);
+
+		return (hMoves.size() - (1 + same) / 2);
 	}
 
 	@Override
@@ -126,16 +124,14 @@ public class DomBoard extends Board2<DomineeringMove> {
 		int same = 0;
 		int coord = -1;
 		for (DomineeringMove h : vMoves) {
-			
-			if (h.getFirst() == coord)
-			{
+
+			if (h.getFirst() == coord) {
 				same++;
 			}
 			coord = h.getSecond();
 		}
-		
-		
-		return (vMoves.size()-(1+same)/2);
+
+		return (vMoves.size() - (1 + same) / 2);
 	}
 
 	@Override
@@ -274,36 +270,42 @@ public class DomBoard extends Board2<DomineeringMove> {
 
 	// A simple conversion to string for testing:
 	public String toString() {
+		String[][] map = new String[sizeX][sizeY];
 		String s = "";
-
-		s = availableMoves().toString();
-		s += "\n\n";
+		
+		for (int v = 0; v < sizeY; v++) {
+			for (int h = 0; h < sizeX; h++) {
+				map[h][v] = "  *  ";
+			}
+		}
+		int count = 0;
+		for (DomineeringMove move : movesMade) {
+			if (count % 2 == 0) {
+				map[move.getFirst()][move.getSecond()] = " ----";
+				map[move.getFirst() + 1][move.getSecond()] = "---- ";
+			} else {
+				map[move.getFirst()][move.getSecond()] = "  |  ";
+				map[move.getFirst()][move.getSecond() + 1] = "  |  ";
+			}
+			count++;
+		}
 		if (nextPlayer() == Player.MAXIMIZER) {
-			for (int v = 0; v < sizeY; v++) {
-				for (int h = 0; h < sizeX; h++) {
-					if (hMoves.contains(new DomineeringMove(h, v)))
-						s += h + "," + v + " ";
-					else if (movesMade.contains(new DomineeringMove(h, v)))
-						s += "  H ";
-					else
-						s += "  * ";
-				}
-				s += "\n";
-
+			for (DomineeringMove move : hMoves) {
+				map[move.getFirst()][move.getSecond()] = " " + move.getFirst() + "," + move.getSecond() + " ";
 			}
-		} else {
-			for (int v = 0; v < sizeY; v++) {
-				for (int h = 0; h < sizeX; h++) {
-					if (vMoves.contains(new DomineeringMove(h, v)))
-						s += h + "," + v + " ";
-					else if (movesMade.contains(new DomineeringMove(h, v)))
-						s += "  V ";
-					else
-						s += "  * ";
-				}
-				s += "\n";
-
+		}
+		else
+		{
+			for (DomineeringMove move : vMoves) {
+				map[move.getFirst()][move.getSecond()] = " " + move.getFirst() + "," + move.getSecond() + " ";
 			}
+		}
+		
+		for (int v = 0; v < sizeY; v++) {
+			for (int h = 0; h < sizeX; h++) {
+				s+= map[h][v];
+			}
+			s+= "\n";
 		}
 
 		return s;
