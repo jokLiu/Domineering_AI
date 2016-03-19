@@ -1,1 +1,1 @@
-The part 2 of the SW assignment
+The part 2 multithreading
