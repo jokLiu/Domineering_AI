@@ -45,11 +45,12 @@ public class BlackBoxDomineering2 {
 	public static void main(String[] args) {
 		assert (args.length == 4);
 		String whoStarts = args[0];
+		String typeOfMove = args[1];
 		int width = Integer.parseInt(args[2]);
 		int height = Integer.parseInt(args[3]);
 		Board2<DomineeringMove> board = new DomBoard(width, height);
 		if (height * width > 25) {
-			if (whoStarts.equals("first")) {
+			if (whoStarts.equals("first") ) {
 				board.tree().firstPlayer(new CommandLineBlackBox(), false);
 			} else if(whoStarts.equals("second")) {
 				board.tree().secondPlayer(new CommandLineBlackBox(), false);
