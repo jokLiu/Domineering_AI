@@ -1,4 +1,3 @@
-import java.util.Map;
 import java.util.Set;
 
 public class GameTree2<Move> {
@@ -47,9 +46,7 @@ public class GameTree2<Move> {
 				c.giveMove(tree.lastMove);
 				GameTree2<Move> newTree = board.tree(tree.lastMove);
 				newTree.secondPlayer(c, isSmallBoard);
-			}
-			else
-			{
+			} else {
 				GameTree2<Move> tree = board.tree(Integer.MIN_VALUE, Integer.MAX_VALUE, 6);
 				c.giveMove(tree.lastMove);
 				GameTree2<Move> newTree = board.tree(tree.lastMove);
@@ -61,15 +58,20 @@ public class GameTree2<Move> {
 	// Plays second using this tree:
 	public void secondPlayer(MoveChannel<Move> c, boolean isSmallBoard) {
 		c.comment(board + "\nThe optimal outcome is " + optimalOutcome);
+		try {
+			if (isLeaf()) {
+				assert (optimalOutcome == board.value());
+				c.end(board.value());
+			} else {
+				Move m = c.getMove();
 
-		if (isLeaf()) {
-			assert (optimalOutcome == board.value());
-			c.end(board.value());
-		} else {
-			Move m = c.getMove();
-			assert (availMoves().contains(m));
-			GameTree2<Move> tree = board.tree(m);
-			tree.firstPlayer(c, isSmallBoard);
+				assert (availMoves().contains(m));
+				GameTree2<Move> tree = board.tree(m);
+				tree.firstPlayer(c, isSmallBoard);
+
+			}
+		} catch (AssertionError e) {
+			System.exit(1);
 		}
 	}
 }

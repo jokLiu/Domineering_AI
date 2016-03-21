@@ -70,7 +70,7 @@ public class GameTree<Move> {
         if (optimalOutcome == child.getValue().optimalOutcome) {
           optimalEntry = child;
           break;
-        }
+        }	
       }
       assert(optimalEntry != null);
       c.giveMove(optimalEntry.getKey());

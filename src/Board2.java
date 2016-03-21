@@ -44,15 +44,12 @@ public abstract class Board2<Move> {
 	public GameTree2<Move> maxTree(int alfa, int beta, int level) {
 		assert (!availableMoves().isEmpty());
 
-		if (level <= 0 /*&& availableMoves().size() > 10*/) {
-			// System.out.println();
+		if (level <= 0 ) {
 			if (availableVerticalMoves().size() <= availableHorizontalMoves().size()) {
 				return new GameTree2<Move>(this, availableMoves(), 1, null);
-			} else /*if (realVerticalMoves()  < safeHorizontalMoves())*/ {
+			} else  {
 				return new GameTree2<Move>(this, availableMoves(), -1, null);
-			} /*else {
-				return new GameTree2<Move>(this, availableMoves(), 0, null);
-			}*/
+			} 
 		}
 		int optimalOutcome = Integer.MIN_VALUE;
 
@@ -73,14 +70,12 @@ public abstract class Board2<Move> {
 	public GameTree2<Move> minTree(int alfa, int beta, int level) {
 		assert (!availableMoves().isEmpty());
 
-		if (level <= 0 /*&& availableMoves().size() > 10*/) {
+		if (level <= 0) {
 			if ( availableVerticalMoves().size() >= availableHorizontalMoves().size()) {
 				return new GameTree2<Move>(this, availableMoves(), -1, null);
-			} else /*if (realHorizontalMoves()  < safeVerticalMoves())*/ {
+			} else  {
 				return new GameTree2<Move>(this, availableMoves(), 1, null);
-			} /*else {
-				return new GameTree2<Move>(this, availableMoves(), 0, null);
-			}*/
+			} 
 		}
 
 		int optimalOutcome = Integer.MAX_VALUE;

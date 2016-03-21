@@ -7,34 +7,38 @@ public class BlackBoxDomineering2 {
 		public DomineeringMove getMove() {
 			Scanner sc = new Scanner(System.in);
 			String s = sc.nextLine();
-
-			int one = 0, two;
+			int one = 0, two=0;
 			String str = "";
-			for (int i = 0; i < s.length(); i++) {
-				if (s.charAt(i) != ',') {
-					str += s.charAt(i);
-				} else {
-					one = Integer.parseInt(str);
-					str = "";
+			try {
+				for (int i = 0; i < s.length(); i++) {
+					if (s.charAt(i) != ',') {
+						str += s.charAt(i);
+					} else {
+						one = Integer.parseInt(str);
+						str = "";
+					}
 				}
-			}
-
+			
 			two = Integer.parseInt(str);
-			System.out.println(one + " " + two);
+			} catch (NumberFormatException e) {
+				System.exit(1);
+			}
 			return (new DomineeringMove(one, two));
 		}
 
 		public void giveMove(DomineeringMove move) {
 			System.err.println("I play " + move);
 			System.out.println(move);
+			System.out.flush();
 		}
+		
 
 		public void comment(String msg) {
-			System.out.println(msg);
+			System.err.println(msg);
 		}
 
 		public void end(int value) {
-			System.out.println("Game over. The result is " + value);
+			System.err.println("Game over. The result is " + value);
 		}
 	}
 

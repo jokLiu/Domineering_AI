@@ -198,34 +198,46 @@ public class DomineeringBoard extends Board<DomineeringMove> {
 
 	// A simple conversion to string for testing:
 	public String toString() {
+		String[][] map = new String[sizeX][sizeY];
 		String s = "";
-
 		
-
-		if(nextPlayer()== Player.MAXIMIZER)
-		{
-			for (int v = 0; v < sizeX ; v++) {
-				for(int h=0; h<sizeY;h++){
-					if(hMoves.contains(new DomineeringMove(h,v))) s += h+","+v+ " ";
-					else  s += "xxx ";
-				}
-				s+= "\n";
-				
+		for (int v = 0; v < sizeY; v++) {
+			for (int h = 0; h < sizeX; h++) {
+				map[h][v] = "  *  ";
+			}
+		}
+		int count = 0;
+		for (DomineeringMove move : movesMade) {
+			if (count % 2 == 0) {
+				map[move.getFirst()][move.getSecond()] = " ----";
+				map[move.getFirst() + 1][move.getSecond()] = "---- ";
+			} else {
+				map[move.getFirst()][move.getSecond()] = "  |  ";
+				map[move.getFirst()][move.getSecond() + 1] = "  |  ";
+			}
+			count++;
+		}
+		if (nextPlayer() == Player.MAXIMIZER) {
+			for (DomineeringMove move : hMoves) {
+				map[move.getFirst()][move.getSecond()] = " " + move.getFirst() + "," + move.getSecond() + " ";
 			}
 		}
 		else
 		{
-			for (int v = 0; v < sizeX ; v++) {
-				for(int h=0; h<sizeY;h++){
-					if(vMoves.contains(new DomineeringMove(h,v))) s += h+","+v+ " ";
-					else  s += "xxx ";
-				}
-				s+= "\n";
-				
+			for (DomineeringMove move : vMoves) {
+				map[move.getFirst()][move.getSecond()] = " " + move.getFirst() + "," + move.getSecond() + " ";
 			}
 		}
 		
+		for (int v = 0; v < sizeY; v++) {
+			for (int h = 0; h < sizeX; h++) {
+				s+= map[h][v];
+			}
+			s+= "\n";
+		}
+
 		return s;
+
 
 	}
 
