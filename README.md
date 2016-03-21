@@ -1,1 +1,1 @@
-The part 2 multithreading
+New branch for completely changing the structure of the board
