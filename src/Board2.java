@@ -9,15 +9,15 @@ public abstract class Board2<Move> {
 
 	abstract Set<Move> availableVerticalMoves();
 
-	abstract int realHorizontalMoves();
-
-	abstract int realVerticalMoves();
-
-	abstract int safeHorizontalMoves();
-
-	abstract int safeVerticalMoves();
+	abstract Move getRandomHorMove();
+	
+	abstract Move getRandomVerMove();
 
 	abstract int value();
+	
+	abstract Move getBestHorMove(int i);
+	
+	abstract Move getBestVerMove(int i);
 
 	abstract Board2<Move> play(Move move);
 
@@ -43,7 +43,17 @@ public abstract class Board2<Move> {
 	// Two helper methods for that, which call the above method tree:
 	public GameTree2<Move> maxTree(int alfa, int beta, int level) {
 		assert (!availableMoves().isEmpty());
-
+		if(availableMoves().size() >= 44)
+		{
+			if(getBestHorMove(1) != null)
+			 return new GameTree2<Move>(this, availableMoves(), 1, getBestHorMove(1));
+			else if(getBestHorMove(2) != null)
+				 return new GameTree2<Move>(this, availableMoves(), 1, getBestHorMove(2));
+			else if(getBestHorMove(3) != null)
+				 return new GameTree2<Move>(this, availableMoves(), 1, getBestHorMove(3));
+			else if(getBestHorMove(4) != null)
+				 return new GameTree2<Move>(this, availableMoves(), 1, getBestHorMove(4));
+		}
 		if (level <= 0 ) {
 			if (availableVerticalMoves().size() <= availableHorizontalMoves().size()) {
 				return new GameTree2<Move>(this, availableMoves(), 1, null);
@@ -60,16 +70,31 @@ public abstract class Board2<Move> {
 			optimalOutcome = Math.max(optimalOutcome, subtree.optimalOutcome());
 			alfa = Math.max(alfa, optimalOutcome);
 			if (alfa == 1) {
-				break;
+				return new GameTree2<Move>(this, availableMoves(), optimalOutcome, lastMove);
+				//break;
 			}
 		}
+		return new GameTree2<Move>(this, availableMoves(), optimalOutcome, getRandomHorMove());
+		
 
-		return new GameTree2<Move>(this, availableMoves(), optimalOutcome, lastMove);
+		
 	}
 
 	public GameTree2<Move> minTree(int alfa, int beta, int level) {
 		assert (!availableMoves().isEmpty());
 
+		if(availableMoves().size() >= 44)
+		{
+			if(getBestVerMove(1) != null)
+				return new GameTree2<Move>(this, availableMoves(), -1, getBestVerMove(1));
+			else if(getBestVerMove(2) != null)
+				return new GameTree2<Move>(this, availableMoves(), -1, getBestVerMove(2));
+			else if(getBestVerMove(3) != null)
+				return new GameTree2<Move>(this, availableMoves(), -1, getBestVerMove(3));
+			else if(getBestVerMove(4) != null)
+				return new GameTree2<Move>(this, availableMoves(), -1, getBestVerMove(4));
+		}
+		
 		if (level <= 0) {
 			if ( availableVerticalMoves().size() >= availableHorizontalMoves().size()) {
 				return new GameTree2<Move>(this, availableMoves(), -1, null);
@@ -87,10 +112,11 @@ public abstract class Board2<Move> {
 			optimalOutcome = Math.min(optimalOutcome, subtree.optimalOutcome());
 			beta = Math.min(beta, optimalOutcome);
 			if (beta == -1) {
-				break;
+				return new GameTree2<Move>(this, availableMoves(), optimalOutcome, lastMove);
+//				break;
 			}
 		}
-
-		return new GameTree2<Move>(this, availableMoves(), optimalOutcome, lastMove);
+		return new GameTree2<Move>(this, availableMoves(), optimalOutcome, getRandomVerMove());
+		
 	}
 }

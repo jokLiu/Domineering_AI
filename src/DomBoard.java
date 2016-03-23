@@ -44,6 +44,32 @@ public class DomBoard extends Board2<DomineeringMove> {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 	}
+	
+	public DomineeringMove getBestHorMove(int i)
+	{
+		if(availableMoves().contains(new DomineeringMove(0,1)) && i==1)
+				return new DomineeringMove(0,1);
+		else if(availableMoves().contains(new DomineeringMove(0,3)) && i==2)
+			return new DomineeringMove(0,3);
+		else if(availableMoves().contains(new DomineeringMove(0,5)) && i==3)
+			return new DomineeringMove(0,5);
+		else if(availableMoves().contains(new DomineeringMove(2,1)) && i==4)
+			return new DomineeringMove(2,1);
+		return null;
+	}
+	
+	public DomineeringMove getBestVerMove(int i )
+	{
+		if(availableMoves().contains(new DomineeringMove(1,0)) && i==1)
+				return new DomineeringMove(1,0);
+		else if(availableMoves().contains(new DomineeringMove(3,0)) && i==2)
+			return new DomineeringMove(3,0);
+		else if(availableMoves().contains(new DomineeringMove(5,0)) && i==3)
+			return new DomineeringMove(5,0);
+		else if(availableMoves().contains(new DomineeringMove(1,2)) && i==4)
+			return new DomineeringMove(1,2);
+		return null;
+	}
 
 	private static List<DomineeringMove> hor(int horizontal, int vertical) {
 
@@ -103,72 +129,7 @@ public class DomBoard extends Board2<DomineeringMove> {
 		return new HashSet<>(vMoves);
 	}
 
-	@Override
-	int realHorizontalMoves() {
 
-		int same = 0;
-		int coord = -1;
-		for (DomineeringMove h : hMoves) {
-
-			if (h.getFirst() == coord) {
-				same++;
-			}
-			coord = h.getSecond();
-		}
-
-		return (hMoves.size() - (1 + same) / 2);
-	}
-
-	@Override
-	int realVerticalMoves() {
-		int same = 0;
-		int coord = -1;
-		for (DomineeringMove h : vMoves) {
-
-			if (h.getFirst() == coord) {
-				same++;
-			}
-			coord = h.getSecond();
-		}
-
-		return (vMoves.size() - (1 + same) / 2);
-	}
-
-	@Override
-	int safeHorizontalMoves() {
-		int number = 0;
-		for (DomineeringMove h : hMoves) {
-			number++;
-			for (DomineeringMove v : vMoves) {
-				if ((h.getFirst() == v.getFirst() && h.getSecond() == v.getSecond())
-						|| (h.getFirst() + 1 == v.getFirst() && h.getSecond() == v.getSecond())
-						|| (h.getFirst() == v.getFirst() && h.getSecond() - 1 == v.getSecond())
-						|| (h.getFirst() + 1 == v.getFirst() && h.getSecond() - 1 == v.getSecond())) {
-					number--;
-					break;
-				}
-			}
-		}
-		return hMoves.size() - number;
-	}
-
-	@Override
-	int safeVerticalMoves() {
-		int number = 0;
-		for (DomineeringMove v : vMoves) {
-			number++;
-			for (DomineeringMove h : hMoves) {
-				if ((v.getFirst() == h.getFirst() && v.getSecond() == h.getSecond())
-						|| (h.getFirst() == v.getFirst() && h.getSecond() + 1 == v.getSecond())
-						|| (h.getFirst() - 1 == v.getFirst() && h.getSecond() == v.getSecond())
-						|| (h.getFirst() - 1 == v.getFirst() && h.getSecond() + 1 == v.getSecond())) {
-					number--;
-					break;
-				}
-			}
-		}
-		return vMoves.size() - number;
-	}
 
 	@Override
 	int value() {
@@ -310,6 +271,17 @@ public class DomBoard extends Board2<DomineeringMove> {
 
 		return s;
 
+	}
+
+	@Override
+	public DomineeringMove getRandomHorMove() {
+		return hMoves.get(hMoves.size()/2);
+		
+	}
+
+	@Override
+	public DomineeringMove getRandomVerMove() {
+		return vMoves.get(vMoves.size()/2);
 	}
 
 }
